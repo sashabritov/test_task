@@ -1,6 +1,28 @@
 <?php
     //error_reporting(E_ERROR);
     $dataFile = 'data.xml';
+
+    if(($_POST['deleteitem']))
+    {
+        $xml = new DOMDocument('1.0', 'uft-8');
+        $xml->load($dataFile);
+        $nodeToRemove = null;
+        $appeals = $xml->getElementsByTagName('appeal');
+        foreach($appeals as $appeal)
+        {
+            $attrValue = $appeal->getAttribute('id');
+            if ($attrValue == $_POST['deleteitem']) {
+                $nodeToRemove = $appeal;
+            }
+        }
+        if($nodeToRemove != null)
+        {
+            unlink($nodeToRemove->lastChild->nodeValue);
+            $xml->documentElement->removeChild($nodeToRemove);
+        }
+        $xml->save($dataFile);
+    }
+
     if(($_POST['name']) && ($_POST['surname']) && ($_POST['email']) && ($_POST['phone']) && ($_FILES['photo']))
     {
         $imageExtension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
@@ -44,7 +66,7 @@
         $phone = $data->createElement('phone', $_POST['phone']);
         $photo = $data->createElement('photo', $imageName);
 
-        $id = $data->getElementsByTagName('appeal')->count();
+        $id = $data->getElementsByTagName('appeal')->count() + 1;
         $appeal->setAttribute('id', $id);
         $appeal->appendChild($name);
         $appeal->appendChild($surname);
@@ -90,27 +112,33 @@
                 </p>
             </form>
         </div>
-        <?
-            if(file_exists($dataFile))
+        <?php
+            $xml = simplexml_load_file($dataFile);
+            $data = $xml->appeal;
+            echo '<table id="table-id" class="table" border="1" align="center">';
+            echo '<thead>';
+            echo '<tr>';
+            echo '<th>Імя</th>';
+            echo '<th>Прізвище</th>';
+            echo '<th>Електронна пошта</th>';
+            echo '<th>Телефон</th>';
+            echo '<th>Фото</th>';
+            echo '<th></th>';
+            echo '</tr>';
+            echo '</thead>';
+            foreach($data as $element)
             {
-                $data = new DOMDocument("1.0", "utf-8");
-                $data->load($dataFile);
-                $appeals = $data->getElementsByTagName('appeal');
-                //var_dump($appeals);
-                echo '<table>';
-                var_dump($appeals[0]);
-                foreach($appeals as $appeal)
-                {
-                    echo '<tr>';
-                    echo '<td>' . $appeal->name->nodeValue . '</td>';
-                    echo '<td>' . $appeal->surname->nodeValue . '</td>';
-                    echo '<td>' . $appeal->email->nodeValue . '</td>';
-                    echo '<td>' . $appeal->phone->nodeValue . '</td>';
-                    echo '<td>' . '<img src="' . $appeal->photo->nodeValue . '"></td>';
-                    echo '</tr>';
-                }
-                echo '</table>';
+                echo '<tr>';
+                echo '<td>' . $element->name . '</td>';
+                echo '<td>' . $element->surname . '</td>';
+                echo '<td>' . $element->email . '</td>';
+                echo '<td>' . $element->phone . '</td>';
+                echo '<td>' . '<img src="' . $element->photo . '"></td>';
+                echo '<td>' . '<form method="POST"><input type="hidden" name="deleteitem" value="' . $element['id'] . '"><input type="submit" value="Видалити"></form>' . '</td>';
+                echo '</tr>';
             }
+            echo '</table>';
         ?>
     </body>
+    <script type="text/javascript" src="script.js"></script>
 </html>
