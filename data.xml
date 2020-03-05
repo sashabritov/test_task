@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appeals>
+    <appeal id="0">
+        <name>qwrqwer</name>
+        <surname>qwer</surname>
+        <email>qwer</email>
+        <phone>qwer</phone>
+        <photo>saved_pictures/1a65d04a73ede25.jpg</photo>
+    </appeal>
+    <appeal id="1"><name>qwrqwer</name><surname>qewr</surname><email>aiusdf</email><phone>fsdsfd</phone><photo>saved_pictures/1bd44452ad8849b.jpg</photo></appeal>
+    <appeal id="2"><name>test3</name><surname>test3</surname><email>test3</email><phone>test3</phone><photo>saved_pictures/efd6e10bfcdfda1.jpg</photo></appeal>
+    <appeal id="3"><name>test3</name><surname>test3</surname><email>test3</email><phone>test3</phone><photo>saved_pictures/8df72cdaf0ed5fb.jpg</photo></appeal>
+</appeals>
