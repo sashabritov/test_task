@@ -1,4 +1,5 @@
 <?php
+    error_reporting(0);
     $dataFile = 'data.xml';
     require('acceptData.php');
 ?>
