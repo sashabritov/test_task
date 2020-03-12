@@ -1,12 +1,12 @@
 <?php
     $xml = simplexml_load_file($dataFile);
     $data = $xml->appeal;
-    if($data->count())
+    if($data && $data->count() != 0)
     {
         echo '<table id="table-id" border="1" align="center">';
         echo '<thead>';
         echo '<tr>';
-        echo '<th role="columnheader">Імя</th>';
+        echo '<th role="columnheader">Ім`я</th>';
         echo '<th role="columnheader">Прізвище</th>';
         echo '<th role="columnheader">Електронна пошта</th>';
         echo '<th role="columnheader">Телефон</th>';

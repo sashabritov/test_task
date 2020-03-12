@@ -1,5 +1,5 @@
 <?php
-if(($_POST['deleteitem']))
+    if(!empty($_POST['deleteitem']))
     {
         $xml = new DOMDocument('1.0', 'uft-8');
         $xml->load($dataFile);
@@ -20,7 +20,7 @@ if(($_POST['deleteitem']))
         $xml->save($dataFile);
     }
 
-    if(($_POST['name']) && ($_POST['surname']) && ($_POST['email']) && ($_POST['phone']) && ($_FILES['photo']))
+    if(!empty($_POST['name']) && !empty($_POST['surname']) && !empty($_POST['email']) && !empty($_POST['phone']) && !empty($_FILES['photo']))
     {
         $imageExtension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
         if(!file_exists('saved_pictures') || !is_dir('saved_pictures'))
@@ -51,8 +51,15 @@ if(($_POST['deleteitem']))
         imagecopyresized($imageResource2, $imageResource, 0, 0, 0, 0, 300, 300, $imageSize[0], $imageSize[1]);
         imagejpeg($imageResource2, $imageName, 75);
 
-        // All data
+        // Write data to file
         $data = new DOMDocument("1.0", "utf-8");
+        if(!file_exists($dataFile) || filesize($dataFile) == 0)
+        {
+            $file = fopen($dataFile, 'w');
+            fwrite($file, '<?xml version="1.0" encoding="utf-8"?>');
+            fwrite($file, '<appeals></appeals>');
+            fclose($file);
+        }
         $data->load($dataFile);
         $appeals = $data->getElementsByTagName('appeals')->item(0);
         if(!$appeals)
@@ -67,7 +74,7 @@ if(($_POST['deleteitem']))
         $phone = $data->createElement('phone', $_POST['phone']);
         $photo = $data->createElement('photo', $imageName);
 
-        $id = $data->getElementsByTagName('appeal')->count() + 1;
+        $id = $data->getElementsByTagName('appeal')->length + 1;
         $appeal->setAttribute('id', $id);
         $appeal->appendChild($name);
         $appeal->appendChild($surname);
